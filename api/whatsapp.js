@@ -1,16 +1,12 @@
-export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    const myUrl = new URL(req.url, `https://${req.headers.host}`);
-    const mode = myUrl.searchParams.get('hub.mode');
-    const token = myUrl.searchParams.get('hub.verify_token');
-    const challenge = myUrl.searchParams.get('hub.challenge');
-    if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
-      return res.status(200).send(challenge);
+export default function handler(req, res) {
+  if (req.method === "GET") {
+    if (req.query["hub.mode"] === "subscribe" && req.query["hub.verify_token"] === "thrivecv2024") {
+      return res.status(200).send(req.query["hub.challenge"]);
     }
-    return res.status(403).send('Forbidden');
+    return res.status(403).send("Forbidden");
   }
-  if (req.method === 'POST') {
-    return res.status(200).send('EVENT_RECEIVED');
+  if (req.method === "POST") {
+    return res.status(200).send("EVENT_RECEIVED");
   }
-  return res.status(405).send('No');
+  return res.status(200).send("ThriveCV Bot is WORKING");
 }
